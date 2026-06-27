@@ -7,11 +7,13 @@ const SPEED       : float = 200.0
 const GRAVITY     : float = 800.0
 const JUMP_FORCE  : float = -420.0
 
-# Boundary dunia (sesuai WorldMap 4800px, ground Y=580)
+# Ground StaticBody2D di Y=580
+# Collision player half-height = 26
+# Floor = 580 - 26 = 554
 const WORLD_LEFT  : float = 40.0
 const WORLD_RIGHT : float = 4760.0
-const WORLD_TOP   : float = 60.0
-const FLOOR_Y     : float = 548.0
+const WORLD_TOP   : float = 50.0
+const FLOOR_Y     : float = 554.0
 
 @onready var _sprite : AnimatedSprite2D = $AnimatedSprite2D
 
@@ -53,20 +55,16 @@ func _handle_jump() -> void:
 
 func _enforce_boundary() -> void:
 	var pos := global_position
-	# Kiri
 	if pos.x < WORLD_LEFT:
 		pos.x = WORLD_LEFT
 		velocity.x = 0.0
-	# Kanan
 	if pos.x > WORLD_RIGHT:
 		pos.x = WORLD_RIGHT
 		velocity.x = 0.0
-	# Atas
 	if pos.y < WORLD_TOP:
 		pos.y = WORLD_TOP
 		velocity.y = 0.0
-	# Jatuh darurat (tembus lantai)
-	if pos.y > FLOOR_Y + 40.0:
+	if pos.y > FLOOR_Y + 30.0:
 		pos.y = FLOOR_Y
 		velocity.y = 0.0
 	global_position = pos

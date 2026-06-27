@@ -18,11 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 TransitionManager="*res://scripts/managers/TransitionManager.gd"
-
 AudioManager="*res://scripts/managers/AudioManager.gd"
-
 SaveManager="*res://scripts/managers/SaveManager.gd"
-
 GameManager="*uid://bg220i1x0vf1m"
 
 [display]

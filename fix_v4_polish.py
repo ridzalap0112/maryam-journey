@@ -1,3 +1,22 @@
+"""
+Maryam Journey - Fix V4 Polish
+python fix_v4_polish.py
+"""
+import os, subprocess
+
+BASE = os.getcwd()
+
+def write(filepath, content):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8", newline="\n") as f:
+        f.write(content)
+    print(f"  ✅  {os.path.relpath(filepath, BASE)}")
+
+print("\n🌙 Maryam Journey — Fix V4 Polish")
+print("=" * 52)
+
+# ── 1. Fix MainMenu.tscn — bulan tidak terpotong, card full ──
+write(os.path.join(BASE, "scenes", "ui", "MainMenu.tscn"), """\
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/MainMenu.gd" id="1_menu"]
@@ -191,8 +210,7 @@ theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1.0, 0.90, 0.38, 1)
 
 [node name="LblDesc" type="Label" parent="UI/Center/Card/Inner"]
-text = "Jelajahi dunia bersama Maryam
-Belajar, bermain, dan tumbuh bersama Islam 🌟"
+text = "Jelajahi dunia bersama Maryam\nBelajar, bermain, dan tumbuh bersama Islam 🌟"
 horizontal_alignment = 1
 autowrap_mode = 3
 theme_override_font_sizes/font_size = 13
@@ -229,3 +247,182 @@ theme_override_styles/hover = SubResource("SB_hover")
 theme_override_styles/pressed = SubResource("SB_btn")
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.50, 0.50, 1)
+""")
+
+# ── 2. Fix WorldMap — player tepat di atas tanah ─────────────
+# Ground StaticBody2D di Y=580, collision center di Y=580+100=680
+# Player harus start di Y = 580 - (collision_half_height) = 580 - 26 = 554
+# Kita set player start Y=545 supaya ada sedikit ruang
+
+# Baca file WorldMap.tscn yang ada, ganti posisi Player
+wmap_path = os.path.join(BASE, "scenes", "world", "WorldMap.tscn")
+if os.path.exists(wmap_path):
+    with open(wmap_path, "r", encoding="utf-8") as f:
+        wmap = f.read()
+
+    # Fix player position — tepat di atas tanah (ground Y=580)
+    # Player collision setengah = 26, jadi player Y = 580 - 26 = 554
+    import re
+
+    # Ganti posisi player
+    wmap = re.sub(
+        r'(\[node name="Player"[^\]]*\])\nposition = Vector2\([^)]+\)',
+        r'\1\nposition = Vector2(200, 545)',
+        wmap
+    )
+
+    # Fix camera limit agar tidak melayang
+    wmap = wmap.replace(
+        "limit_top = 0\nlimit_bottom = 720",
+        "limit_top = 0\nlimit_bottom = 720\ndrag_horizontal_enabled = true\ndrag_horizontal_offset = 0.0"
+    )
+
+    with open(wmap_path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(wmap)
+    print("  ✅  scenes/world/WorldMap.tscn — player position fixed")
+else:
+    print("  ⚠️   WorldMap.tscn tidak ditemukan, skip")
+
+# ── 3. Player.gd — perbaiki FLOOR_Y sesuai ground baru ───────
+write(os.path.join(BASE, "scripts", "player", "Player.gd"), """\
+# =============================================================
+#  scripts/player/Player.gd  —  Godot 4.7
+# =============================================================
+extends CharacterBody2D
+
+const SPEED       : float = 200.0
+const GRAVITY     : float = 800.0
+const JUMP_FORCE  : float = -420.0
+
+# Ground StaticBody2D di Y=580
+# Collision player half-height = 26
+# Floor = 580 - 26 = 554
+const WORLD_LEFT  : float = 40.0
+const WORLD_RIGHT : float = 4760.0
+const WORLD_TOP   : float = 50.0
+const FLOOR_Y     : float = 554.0
+
+@onready var _sprite : AnimatedSprite2D = $AnimatedSprite2D
+
+var _anim_current : String = ""
+
+
+func _ready() -> void:
+\tassert(_sprite != null, "AnimatedSprite2D tidak ditemukan!")
+\tadd_to_group("player")
+\t_play_anim("idle")
+
+
+func _physics_process(delta: float) -> void:
+\t_apply_gravity(delta)
+\t_handle_movement()
+\t_handle_jump()
+\tmove_and_slide()
+\t_enforce_boundary()
+\t_update_animation()
+
+
+func _apply_gravity(delta: float) -> void:
+\tif not is_on_floor():
+\t\tvelocity.y += GRAVITY * delta
+\t\tvelocity.y = min(velocity.y, 1400.0)
+
+
+func _handle_movement() -> void:
+\tvar dir := Input.get_axis("move_left", "move_right")
+\tvelocity.x = dir * SPEED
+\tif dir != 0.0:
+\t\t_sprite.flip_h = dir < 0.0
+
+
+func _handle_jump() -> void:
+\tif is_on_floor() and Input.is_action_just_pressed("jump"):
+\t\tvelocity.y = JUMP_FORCE
+
+
+func _enforce_boundary() -> void:
+\tvar pos := global_position
+\tif pos.x < WORLD_LEFT:
+\t\tpos.x = WORLD_LEFT
+\t\tvelocity.x = 0.0
+\tif pos.x > WORLD_RIGHT:
+\t\tpos.x = WORLD_RIGHT
+\t\tvelocity.x = 0.0
+\tif pos.y < WORLD_TOP:
+\t\tpos.y = WORLD_TOP
+\t\tvelocity.y = 0.0
+\tif pos.y > FLOOR_Y + 30.0:
+\t\tpos.y = FLOOR_Y
+\t\tvelocity.y = 0.0
+\tglobal_position = pos
+
+
+func _update_animation() -> void:
+\tvar next : String
+\tif not is_on_floor():
+\t\tnext = "jump"
+\telif abs(velocity.x) > 10.0:
+\t\tnext = "walk"
+\telse:
+\t\tnext = "idle"
+\t_play_anim(next)
+
+
+func _play_anim(anim_name: String) -> void:
+\tif _anim_current == anim_name:
+\t\treturn
+\tif _sprite.sprite_frames and _sprite.sprite_frames.has_animation(anim_name):
+\t\t_anim_current = anim_name
+\t\t_sprite.play(anim_name)
+""")
+
+# ── 4. Parallax script untuk WorldMap ────────────────────────
+write(os.path.join(BASE, "scripts", "world", "ParallaxSky.gd"), """\
+# =============================================================
+#  scripts/world/ParallaxSky.gd
+#  Tempelkan ke node Sky (ColorRect) di WorldMap
+#  Sky bergerak 20% dari kecepatan kamera — memberi kesan depth
+# =============================================================
+extends Node2D
+
+const PARALLAX_FACTOR : float = 0.15
+
+var _start_x   : float = 0.0
+var _camera    : Camera2D
+
+
+func _ready() -> void:
+\t_start_x = position.x
+\tawait get_tree().process_frame
+\t# Cari Camera2D di dalam Player
+\tvar player = get_tree().get_first_node_in_group("player")
+\tif player:
+\t\t_camera = player.get_node_or_null("Camera2D")
+
+
+func _process(_delta: float) -> void:
+\tif not _camera:
+\t\treturn
+\tposition.x = _start_x + _camera.get_screen_center_position().x * PARALLAX_FACTOR
+""")
+
+# ── 5. Git commit ─────────────────────────────────────────────
+print("\n  📦 Commit ke GitHub...")
+try:
+    subprocess.run(["git", "add", "."], cwd=BASE, check=True)
+    subprocess.run(["git", "commit", "-m",
+        "fix: player position on ground, moon fix, card centered, parallax sky"],
+        cwd=BASE, check=True)
+    subprocess.run(["git", "push"], cwd=BASE, check=True)
+    print("  ✅  GitHub updated!")
+except Exception as e:
+    print(f"  ⚠️   Git: {e}")
+
+print("\n" + "=" * 52)
+print("  SELESAI!")
+print("  1. Godot → Project → Reload Current Project")
+print("  2. Tekan F5")
+print("  3. Main Menu: bulan fix, card center, tidak terpotong")
+print("  4. World: karakter berdiri TEPAT di atas tanah")
+print("  5. Boundary kiri & kanan aktif")
+print("=" * 52 + "\n")
