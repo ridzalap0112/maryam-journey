@@ -1,12 +1,17 @@
 # =============================================================
-#  scripts/player/Player.gd
-#  Karakter Maryam — Godot 4.7
+#  scripts/player/Player.gd  —  Godot 4.7
 # =============================================================
 extends CharacterBody2D
 
-const SPEED      : float = 160.0
-const GRAVITY    : float = 700.0
-const JUMP_FORCE : float = -360.0
+const SPEED       : float = 200.0
+const GRAVITY     : float = 800.0
+const JUMP_FORCE  : float = -420.0
+
+# Boundary dunia (sesuai WorldMap 4800px, ground Y=580)
+const WORLD_LEFT  : float = 40.0
+const WORLD_RIGHT : float = 4760.0
+const WORLD_TOP   : float = 60.0
+const FLOOR_Y     : float = 548.0
 
 @onready var _sprite : AnimatedSprite2D = $AnimatedSprite2D
 
@@ -15,6 +20,7 @@ var _anim_current : String = ""
 
 func _ready() -> void:
 	assert(_sprite != null, "AnimatedSprite2D tidak ditemukan!")
+	add_to_group("player")
 	_play_anim("idle")
 
 
@@ -22,13 +28,15 @@ func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
 	_handle_movement()
 	_handle_jump()
-	_update_animation()
 	move_and_slide()
+	_enforce_boundary()
+	_update_animation()
 
 
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
+		velocity.y = min(velocity.y, 1400.0)
 
 
 func _handle_movement() -> void:
@@ -43,11 +51,32 @@ func _handle_jump() -> void:
 		velocity.y = JUMP_FORCE
 
 
+func _enforce_boundary() -> void:
+	var pos := global_position
+	# Kiri
+	if pos.x < WORLD_LEFT:
+		pos.x = WORLD_LEFT
+		velocity.x = 0.0
+	# Kanan
+	if pos.x > WORLD_RIGHT:
+		pos.x = WORLD_RIGHT
+		velocity.x = 0.0
+	# Atas
+	if pos.y < WORLD_TOP:
+		pos.y = WORLD_TOP
+		velocity.y = 0.0
+	# Jatuh darurat (tembus lantai)
+	if pos.y > FLOOR_Y + 40.0:
+		pos.y = FLOOR_Y
+		velocity.y = 0.0
+	global_position = pos
+
+
 func _update_animation() -> void:
 	var next : String
 	if not is_on_floor():
 		next = "jump"
-	elif velocity.x != 0.0:
+	elif abs(velocity.x) > 10.0:
 		next = "walk"
 	else:
 		next = "idle"

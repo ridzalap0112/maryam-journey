@@ -1,3 +1,186 @@
+"""
+Maryam Journey - Build V3 Professional
+python build_v3_pro.py
+"""
+import os
+
+BASE = os.getcwd()
+
+def write(filepath, content):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8", newline="\n") as f:
+        f.write(content)
+    print(f"  ✅  {os.path.relpath(filepath, BASE)}")
+
+print("\n🌙 Maryam Journey — Build V3 Professional")
+print("=" * 52)
+
+# Ground Y = 580. Ground collision size = 4800 x 200 (tebal, anti-jatuh)
+# Semua bangunan bottom = 580 (kaki bangunan tepat di tanah)
+# Player start Y = 500 (di atas tanah)
+
+# ── Player.gd ────────────────────────────────────────────────
+write(os.path.join(BASE, "scripts", "player", "Player.gd"), """\
+# =============================================================
+#  scripts/player/Player.gd  —  Godot 4.7
+# =============================================================
+extends CharacterBody2D
+
+const SPEED      : float = 200.0
+const GRAVITY    : float = 800.0
+const JUMP_FORCE : float = -420.0
+const FLOOR_Y    : float = 540.0   # batas bawah darurat
+
+@onready var _sprite : AnimatedSprite2D = $AnimatedSprite2D
+
+var _anim_current : String = ""
+
+
+func _ready() -> void:
+\tassert(_sprite != null, "AnimatedSprite2D tidak ditemukan!")
+\tadd_to_group("player")
+\t_play_anim("idle")
+
+
+func _physics_process(delta: float) -> void:
+\t_apply_gravity(delta)
+\t_handle_movement()
+\t_handle_jump()
+\t_clamp_position()
+\t_update_animation()
+\tmove_and_slide()
+
+
+func _apply_gravity(delta: float) -> void:
+\tif not is_on_floor():
+\t\tvelocity.y += GRAVITY * delta
+\t\tvelocity.y = min(velocity.y, 1200.0)
+
+
+func _handle_movement() -> void:
+\tvar dir := Input.get_axis("move_left", "move_right")
+\tvelocity.x = dir * SPEED
+\tif dir != 0.0:
+\t\t_sprite.flip_h = dir < 0.0
+
+
+func _handle_jump() -> void:
+\tif is_on_floor() and Input.is_action_just_pressed("jump"):
+\t\tvelocity.y = JUMP_FORCE
+
+
+func _clamp_position() -> void:
+\t# Darurat: kalau entah bagaimana tembus lantai, reset
+\tif global_position.y > FLOOR_Y + 60.0:
+\t\tglobal_position.y = FLOOR_Y
+\t\tvelocity.y = 0.0
+\t# Jangan keluar batas kiri
+\tif global_position.x < 40.0:
+\t\tglobal_position.x = 40.0
+
+
+func _update_animation() -> void:
+\tvar next : String
+\tif not is_on_floor():
+\t\tnext = "jump"
+\telif abs(velocity.x) > 10.0:
+\t\tnext = "walk"
+\telse:
+\t\tnext = "idle"
+\t_play_anim(next)
+
+
+func _play_anim(anim_name: String) -> void:
+\tif _anim_current == anim_name:
+\t\treturn
+\tif _sprite.sprite_frames and _sprite.sprite_frames.has_animation(anim_name):
+\t\t_anim_current = anim_name
+\t\t_sprite.play(anim_name)
+""")
+
+# ── LocationZone.gd ──────────────────────────────────────────
+write(os.path.join(BASE, "scripts", "locations", "LocationZone.gd"), """\
+# =============================================================
+#  scripts/locations/LocationZone.gd
+# =============================================================
+extends Area2D
+
+@export var location_name : String = "Lokasi"
+@export var location_key  : String = "masjid"
+
+@onready var _panel : Panel = $LabelPanel
+@onready var _label : Label = $LabelPanel/Label
+@onready var _hint  : Label = $LabelPanel/Hint
+
+var _inside   : bool  = false
+var _bob_time : float = 0.0
+
+
+func _ready() -> void:
+\t_label.text = location_name
+\t_hint.text  = "▼ Tekan Enter"
+\t_panel.visible = false
+\tbody_entered.connect(_on_entered)
+\tbody_exited.connect(_on_exited)
+
+
+func _process(delta: float) -> void:
+\tif not _inside:
+\t\treturn
+\t_bob_time += delta
+\t_panel.position.y = -140.0 + sin(_bob_time * 2.8) * 6.0
+\tif Input.is_action_just_pressed("interact"):
+\t\t_enter()
+
+
+func _on_entered(body: Node2D) -> void:
+\tif body.is_in_group("player"):
+\t\t_inside = true
+\t\t_bob_time = 0.0
+\t\t_panel.position.y = -140.0
+\t\t_panel.visible = true
+
+
+func _on_exited(body: Node2D) -> void:
+\tif body.is_in_group("player"):
+\t\t_inside = false
+\t\t_panel.visible = false
+
+
+func _enter() -> void:
+\tif not GameManager.is_location_unlocked(location_key):
+\t\t_hint.text = "🔒 Terkunci"
+\t\treturn
+\tprint("[Zone] Masuk: ", location_name)
+""")
+
+# ── HUD.gd ───────────────────────────────────────────────────
+write(os.path.join(BASE, "scripts", "ui", "HUD.gd"), """\
+# =============================================================
+#  scripts/ui/HUD.gd
+# =============================================================
+extends CanvasLayer
+
+@onready var _star_label : Label = $StarPanel/StarLabel
+@onready var _name_label : Label = $NameLabel
+
+
+func _ready() -> void:
+\tGameManager.star_collected.connect(_on_star)
+\t_name_label.text = "🌙 " + GameManager.player_name
+\t_star_label.text = "⭐  " + str(GameManager.total_stars)
+
+
+func _on_star(total: int) -> void:
+\t_star_label.text = "⭐  " + str(total)
+""")
+
+# ── WorldMap.tscn V3 — ground solid, bangunan rapi ───────────
+# GROUND: StaticBody2D di Y=580, collision tebal 200px ke bawah
+# Semua bangunan: kaki di Y=580
+# Player start: Y=520
+
+write(os.path.join(BASE, "scenes", "world", "WorldMap.tscn"), """\
 [gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_player"]
@@ -58,9 +241,9 @@ corner_radius_bottom_left = 8
 script/source = "extends Node2D
 @export var speed : float = 24.0
 func _process(delta):
-	position.x += speed * delta
-	if position.x > 5200.0:
-		position.x = -320.0
+\tposition.x += speed * delta
+\tif position.x > 5200.0:
+\t\tposition.x = -320.0
 "
 
 [node name="WorldMap" type="Node2D"]
@@ -701,3 +884,13 @@ theme_override_styles/panel = SubResource("SB_hud")
 position = Vector2(10, 7)
 size = Vector2(108, 22)
 text = "⭐  0"
+""")
+
+print("\n" + "=" * 52)
+print("  SELESAI!")
+print("  1. Godot → Project → Reload Current Project")
+print("  2. Tekan F5")
+print("  3. Ground sekarang SOLID dan tebal")
+print("  4. Semua bangunan berdiri tepat di atas tanah")
+print("  5. Karakter lebih besar, tidak bisa jatuh")
+print("=" * 52 + "\n")
