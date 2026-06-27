@@ -13,8 +13,8 @@ corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-content_margin_left = 24.0
-content_margin_right = 24.0
+content_margin_left = 20.0
+content_margin_right = 20.0
 content_margin_top = 12.0
 content_margin_bottom = 12.0
 
@@ -29,26 +29,28 @@ corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-content_margin_left = 24.0
-content_margin_right = 24.0
+content_margin_left = 20.0
+content_margin_right = 20.0
 content_margin_top = 12.0
 content_margin_bottom = 12.0
 
 [sub_resource type="StyleBoxFlat" id="SB_card"]
-bg_color = Color(0.05, 0.04, 0.18, 0.92)
+bg_color = Color(0.05, 0.04, 0.18, 0.94)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(1.0, 0.84, 0.12, 0.75)
+border_color = Color(1.0, 0.84, 0.12, 0.80)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
-content_margin_left = 32.0
-content_margin_right = 32.0
-content_margin_top = 28.0
-content_margin_bottom = 28.0
+content_margin_left = 36.0
+content_margin_right = 36.0
+content_margin_top = 32.0
+content_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxEmpty" id="SB_empty"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_menu")
@@ -152,66 +154,91 @@ polygon = PackedVector2Array(0,534, 18,500, 38,484, 50,480, 62,484, 82,500, 100,
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Center" type="CenterContainer" parent="UI"]
-anchors_preset = 15
+[node name="Root" type="Control" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_right = 1280.0
 offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Card" type="Panel" parent="UI/Center"]
-custom_minimum_size = Vector2(460, 0)
+[node name="Card" type="Panel" parent="UI/Root"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -200.0
+offset_right = 230.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("SB_card")
 
-[node name="Inner" type="VBoxContainer" parent="UI/Center/Card"]
-anchors_preset = 15
-theme_override_constants/separation = 14
+[node name="Inner" type="VBoxContainer" parent="UI/Root/Card"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 32.0
+offset_right = -36.0
+offset_bottom = -32.0
+theme_override_constants/separation = 12
 
-[node name="LblTitle" type="Label" parent="UI/Center/Card/Inner"]
+[node name="LblTitle" type="Label" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 text = "🌙 Maryam Journey"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 30
 
-[node name="LblBismillah" type="Label" parent="UI/Center/Card/Inner"]
+[node name="LblBismillah" type="Label" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 text = "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(1.0, 0.90, 0.38, 1)
 
-[node name="LblDesc" type="Label" parent="UI/Center/Card/Inner"]
+[node name="LblDesc" type="Label" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 text = "Jelajahi dunia bersama Maryam
 Belajar, bermain, dan tumbuh bersama Islam 🌟"
 horizontal_alignment = 1
 autowrap_mode = 3
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.80, 0.80, 0.94, 1)
 
-[node name="LblStars" type="Label" parent="UI/Center/Card/Inner"]
+[node name="LblStars" type="Label" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 text = "Petualangan baru menantimu!"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1.0, 0.84, 0.12, 1)
 
-[node name="Sep" type="HSeparator" parent="UI/Center/Card/Inner"]
+[node name="Sep" type="HSeparator" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 
-[node name="BtnStart" type="Button" parent="UI/Center/Card/Inner"]
+[node name="BtnStart" type="Button" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 text = "✨  Mulai Petualangan Baru"
 theme_override_styles/normal = SubResource("SB_btn")
 theme_override_styles/hover = SubResource("SB_hover")
 theme_override_styles/pressed = SubResource("SB_btn")
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 
-[node name="BtnContinue" type="Button" parent="UI/Center/Card/Inner"]
+[node name="BtnContinue" type="Button" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 text = "▶  Lanjutkan Petualangan"
 visible = false
 theme_override_styles/normal = SubResource("SB_btn")
 theme_override_styles/hover = SubResource("SB_hover")
 theme_override_styles/pressed = SubResource("SB_btn")
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 
-[node name="BtnReset" type="Button" parent="UI/Center/Card/Inner"]
+[node name="BtnReset" type="Button" parent="UI/Root/Card/Inner"]
+size_flags_horizontal = 3
 text = "🗑  Hapus Progress"
 visible = false
 theme_override_styles/normal = SubResource("SB_btn")
 theme_override_styles/hover = SubResource("SB_hover")
 theme_override_styles/pressed = SubResource("SB_btn")
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.50, 0.50, 1)

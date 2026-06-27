@@ -518,7 +518,7 @@ polygon = PackedVector2Array(4154,418, 4156,464, 4154,464, 4152,418)
 position = Vector2(0, 580)
 
 [node name="GroundCollision" type="CollisionShape2D" parent="Ground"]
-position = Vector2(2400, 100)
+position = Vector2(2400, 150)
 shape = SubResource("Shape_ground")
 
 [node name="GrassTop" type="ColorRect" parent="Ground"]
@@ -663,7 +663,7 @@ text = "▼ Tekan Enter"
 horizontal_alignment = 1
 
 [node name="Player" type="CharacterBody2D" parent="."]
-position = Vector2(200, 545)
+position = Vector2(200, 554)
 script = ExtResource("1_player")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]

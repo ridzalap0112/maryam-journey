@@ -7,9 +7,6 @@ const SPEED       : float = 200.0
 const GRAVITY     : float = 800.0
 const JUMP_FORCE  : float = -420.0
 
-# Ground StaticBody2D di Y=580
-# Collision player half-height = 26
-# Floor = 580 - 26 = 554
 const WORLD_LEFT  : float = 40.0
 const WORLD_RIGHT : float = 4760.0
 const WORLD_TOP   : float = 50.0
@@ -64,7 +61,7 @@ func _enforce_boundary() -> void:
 	if pos.y < WORLD_TOP:
 		pos.y = WORLD_TOP
 		velocity.y = 0.0
-	if pos.y > FLOOR_Y + 30.0:
+	if pos.y > FLOOR_Y + 20.0:
 		pos.y = FLOOR_Y
 		velocity.y = 0.0
 	global_position = pos
