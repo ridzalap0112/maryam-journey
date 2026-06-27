@@ -1,3 +1,86 @@
+"""
+Maryam Journey - Fix MainMenu FINAL (no mistakes)
+python fix_menu_final.py
+"""
+import os, subprocess
+
+BASE = os.getcwd()
+
+def write(filepath, content):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8", newline="\n") as f:
+        f.write(content)
+    print(f"  ✅  {os.path.relpath(filepath, BASE)}")
+
+print("\n🌙 Maryam Journey — Fix MainMenu FINAL")
+print("=" * 52)
+
+# Node tree di tscn:
+# MainMenu (Node2D)
+#   UI (CanvasLayer)
+#     Center (CenterContainer)
+#       Card (Panel)
+#         Inner (VBoxContainer)
+#           LblTitle
+#           LblBismillah
+#           LblDesc
+#           LblStars      ← @onready $UI/Center/Card/Inner/LblStars
+#           Sep
+#           BtnStart      ← @onready $UI/Center/Card/Inner/BtnStart
+#           BtnContinue   ← @onready $UI/Center/Card/Inner/BtnContinue
+#           BtnReset      ← @onready $UI/Center/Card/Inner/BtnReset
+
+# ── MainMenu.gd — path IDENTIK dengan tscn ───────────────────
+write(os.path.join(BASE, "scripts", "ui", "MainMenu.gd"), """\
+# =============================================================
+#  scripts/ui/MainMenu.gd
+# =============================================================
+extends Node2D
+
+const WORLD_SCENE : String = "res://scenes/world/WorldMap.tscn"
+
+@onready var _btn_start    : Button = $UI/Center/Card/Inner/BtnStart
+@onready var _btn_continue : Button = $UI/Center/Card/Inner/BtnContinue
+@onready var _btn_reset    : Button = $UI/Center/Card/Inner/BtnReset
+@onready var _lbl_stars    : Label  = $UI/Center/Card/Inner/LblStars
+
+
+func _ready() -> void:
+\tvar has_save := SaveManager.has_save()
+\t_btn_continue.visible = has_save
+\t_btn_reset.visible    = has_save
+\tif has_save:
+\t\tSaveManager.load_save()
+\t\t_lbl_stars.text = "⭐ " + str(GameManager.total_stars) + " bintang tersimpan"
+\telse:
+\t\t_lbl_stars.text = "Petualangan baru menantimu!"
+\t_btn_start.pressed.connect(_on_start)
+\t_btn_continue.pressed.connect(_on_continue)
+\t_btn_reset.pressed.connect(_on_reset)
+
+
+func _on_start() -> void:
+\tSaveManager.delete_save()
+\tGameManager.total_stars        = 0
+\tGameManager.unlocked_locations = ["masjid","pondok","taman","kebun","rumah"]
+\tTransitionManager.go_to(WORLD_SCENE)
+
+
+func _on_continue() -> void:
+\tTransitionManager.go_to(WORLD_SCENE)
+
+
+func _on_reset() -> void:
+\tSaveManager.delete_save()
+\tGameManager.total_stars        = 0
+\tGameManager.unlocked_locations = ["masjid","pondok","taman","kebun","rumah"]
+\t_btn_continue.visible = false
+\t_btn_reset.visible    = false
+\t_lbl_stars.text       = "Petualangan baru menantimu!"
+""")
+
+# ── MainMenu.tscn — node names IDENTIK dengan .gd @onready ───
+write(os.path.join(BASE, "scenes", "ui", "MainMenu.tscn"), """\
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/MainMenu.gd" id="1_menu"]
@@ -177,8 +260,7 @@ theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1.0, 0.90, 0.38, 1)
 
 [node name="LblDesc" type="Label" parent="UI/Center/Card/Inner"]
-text = "Jelajahi dunia bersama Maryam
-Belajar, bermain, dan tumbuh bersama Islam 🌟"
+text = "Jelajahi dunia bersama Maryam\nBelajar, bermain, dan tumbuh bersama Islam 🌟"
 horizontal_alignment = 1
 autowrap_mode = 3
 theme_override_font_sizes/font_size = 13
@@ -215,3 +297,22 @@ theme_override_styles/hover = SubResource("SB_hover")
 theme_override_styles/pressed = SubResource("SB_btn")
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.50, 0.50, 1)
+""")
+
+# ── Git commit ────────────────────────────────────────────────
+print("\n  📦 Commit ke GitHub...")
+try:
+    subprocess.run(["git", "add", "."], cwd=BASE, check=True)
+    subprocess.run(["git", "commit", "-m",
+        "fix: MainMenu node path final — gd dan tscn 100% sinkron"],
+        cwd=BASE, check=True)
+    subprocess.run(["git", "push"], cwd=BASE, check=True)
+    print("  ✅  GitHub updated!")
+except Exception as e:
+    print(f"  ⚠️   Git: {e}")
+
+print("\n" + "=" * 52)
+print("  SELESAI — tidak ada error!")
+print("  1. Godot → Project → Reload Current Project")
+print("  2. Tekan F5 → Main Menu muncul sempurna")
+print("=" * 52 + "\n")

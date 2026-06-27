@@ -5,10 +5,10 @@ extends Node2D
 
 const WORLD_SCENE : String = "res://scenes/world/WorldMap.tscn"
 
-@onready var _btn_start    : Button = $UI/VBox/Card/Inner/BtnStart
-@onready var _btn_continue : Button = $UI/VBox/Card/Inner/BtnContinue
-@onready var _btn_reset    : Button = $UI/VBox/Card/Inner/BtnReset
-@onready var _lbl_stars    : Label  = $UI/VBox/Card/Inner/LblStars
+@onready var _btn_start    : Button = $UI/Center/Card/Inner/BtnStart
+@onready var _btn_continue : Button = $UI/Center/Card/Inner/BtnContinue
+@onready var _btn_reset    : Button = $UI/Center/Card/Inner/BtnReset
+@onready var _lbl_stars    : Label  = $UI/Center/Card/Inner/LblStars
 
 
 func _ready() -> void:
