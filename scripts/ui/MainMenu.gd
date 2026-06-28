@@ -1,6 +1,3 @@
-# =============================================================
-#  scripts/ui/MainMenu.gd
-# =============================================================
 extends Node2D
 
 const WORLD_SCENE : String = "res://scenes/world/WorldMap.tscn"

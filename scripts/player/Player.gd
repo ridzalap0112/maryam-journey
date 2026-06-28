@@ -1,19 +1,14 @@
-# =============================================================
-#  scripts/player/Player.gd  —  Godot 4.7
-# =============================================================
 extends CharacterBody2D
 
 const SPEED       : float = 200.0
 const GRAVITY     : float = 800.0
 const JUMP_FORCE  : float = -420.0
-
 const WORLD_LEFT  : float = 40.0
 const WORLD_RIGHT : float = 4760.0
 const WORLD_TOP   : float = 50.0
 const FLOOR_Y     : float = 554.0
 
 @onready var _sprite : AnimatedSprite2D = $AnimatedSprite2D
-
 var _anim_current : String = ""
 
 
@@ -68,13 +63,11 @@ func _enforce_boundary() -> void:
 
 
 func _update_animation() -> void:
-	var next : String
+	var next := "idle"
 	if not is_on_floor():
 		next = "jump"
 	elif abs(velocity.x) > 10.0:
 		next = "walk"
-	else:
-		next = "idle"
 	_play_anim(next)
 
 

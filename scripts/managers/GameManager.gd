@@ -1,12 +1,8 @@
-# =============================================================
-#  scripts/managers/GameManager.gd
-#  Autoload global
-# =============================================================
 extends Node
 
 var player_name        : String = "Maryam"
 var total_stars        : int    = 0
-var unlocked_locations : Array  = ["masjid", "pondok", "taman", "kebun", "rumah"]
+var unlocked_locations : Array  = ["masjid","pondok","taman","kebun","rumah"]
 
 signal star_collected(total: int)
 signal location_unlocked(location_name: String)
@@ -22,12 +18,12 @@ func add_star(amount: int = 1) -> void:
 	SaveManager.save()
 
 
-func unlock_location(location_name: String) -> void:
-	if location_name not in unlocked_locations:
-		unlocked_locations.append(location_name)
-		location_unlocked.emit(location_name)
+func unlock_location(loc: String) -> void:
+	if loc not in unlocked_locations:
+		unlocked_locations.append(loc)
+		location_unlocked.emit(loc)
 		SaveManager.save()
 
 
-func is_location_unlocked(location_name: String) -> bool:
-	return location_name in unlocked_locations
+func is_location_unlocked(loc: String) -> bool:
+	return loc in unlocked_locations
