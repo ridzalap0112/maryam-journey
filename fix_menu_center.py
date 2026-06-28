@@ -1,3 +1,85 @@
+"""
+Maryam Journey - Fix Menu Center FINAL
+python fix_menu_center.py
+"""
+import os, subprocess
+
+BASE = os.getcwd()
+
+def write(filepath, content):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8", newline="\n") as f:
+        f.write(content)
+    print(f"  ✅  {os.path.relpath(filepath, BASE)}")
+
+print("\n🌙 Fix Menu Center")
+print("=" * 48)
+
+# Solusi paling reliable di Godot 4:
+# Gunakan MarginContainer full-screen sebagai root UI,
+# di dalamnya CenterContainer, di dalamnya Card.
+# CenterContainer SELALU center child-nya secara otomatis.
+#
+# Node tree UI:
+# UI (CanvasLayer)
+#   Margin (MarginContainer) — full 1280x720
+#     Center (CenterContainer)
+#       Card (Panel) — fixed size 460x360
+#         Inner (VBoxContainer) — fill card
+#           LblTitle, LblBismillah, LblDesc, LblStars
+#           Sep, BtnStart, BtnContinue, BtnReset
+#
+# @onready path: $UI/Margin/Center/Card/Inner/[NodeName]
+
+write(os.path.join(BASE, "scripts", "ui", "MainMenu.gd"), """\
+# =============================================================
+#  scripts/ui/MainMenu.gd
+# =============================================================
+extends Node2D
+
+const WORLD_SCENE : String = "res://scenes/world/WorldMap.tscn"
+
+@onready var _btn_start    : Button = $UI/Margin/Center/Card/Inner/BtnStart
+@onready var _btn_continue : Button = $UI/Margin/Center/Card/Inner/BtnContinue
+@onready var _btn_reset    : Button = $UI/Margin/Center/Card/Inner/BtnReset
+@onready var _lbl_stars    : Label  = $UI/Margin/Center/Card/Inner/LblStars
+
+
+func _ready() -> void:
+\tvar has_save := SaveManager.has_save()
+\t_btn_continue.visible = has_save
+\t_btn_reset.visible    = has_save
+\tif has_save:
+\t\tSaveManager.load_save()
+\t\t_lbl_stars.text = "⭐ " + str(GameManager.total_stars) + " bintang tersimpan"
+\telse:
+\t\t_lbl_stars.text = "Petualangan baru menantimu!"
+\t_btn_start.pressed.connect(_on_start)
+\t_btn_continue.pressed.connect(_on_continue)
+\t_btn_reset.pressed.connect(_on_reset)
+
+
+func _on_start() -> void:
+\tSaveManager.delete_save()
+\tGameManager.total_stars        = 0
+\tGameManager.unlocked_locations = ["masjid","pondok","taman","kebun","rumah"]
+\tTransitionManager.go_to(WORLD_SCENE)
+
+
+func _on_continue() -> void:
+\tTransitionManager.go_to(WORLD_SCENE)
+
+
+func _on_reset() -> void:
+\tSaveManager.delete_save()
+\tGameManager.total_stars        = 0
+\tGameManager.unlocked_locations = ["masjid","pondok","taman","kebun","rumah"]
+\t_btn_continue.visible = false
+\t_btn_reset.visible    = false
+\t_lbl_stars.text       = "Petualangan baru menantimu!"
+""")
+
+write(os.path.join(BASE, "scenes", "ui", "MainMenu.tscn"), """\
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/MainMenu.gd" id="1_menu"]
@@ -228,3 +310,20 @@ theme_override_styles/hover = SubResource("SB_hover")
 theme_override_styles/pressed = SubResource("SB_btn")
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.50, 0.50, 1)
+""")
+
+# ── Git commit ────────────────────────────────────────────────
+try:
+    subprocess.run(["git", "add", "."], cwd=BASE, check=True)
+    subprocess.run(["git", "commit", "-m",
+        "fix: main menu card center via MarginContainer+CenterContainer"],
+        cwd=BASE, check=True)
+    subprocess.run(["git", "push"], cwd=BASE, check=True)
+    print("  ✅  GitHub updated!")
+except Exception as e:
+    print(f"  ⚠️   Git: {e}")
+
+print("\n" + "=" * 48)
+print("  SELESAI!")
+print("  Godot → Reload → F5 → Card tepat di tengah layar")
+print("=" * 48 + "\n")
