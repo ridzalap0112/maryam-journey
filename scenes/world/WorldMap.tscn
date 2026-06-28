@@ -547,6 +547,7 @@ position = Vector2(790, 500)
 script = ExtResource("2_zone")
 location_name = "Masjid An-Nur"
 location_key = "masjid"
+scene_path = "res://scenes/locations/MasjidScene.tscn"
 [node name="Shape" type="CollisionShape2D" parent="Locations/ZoneMasjid"]
 shape = SubResource("Shape_zone")
 [node name="LabelPanel" type="Panel" parent="Locations/ZoneMasjid"]
