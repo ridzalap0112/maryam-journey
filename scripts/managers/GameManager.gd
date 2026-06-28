@@ -1,8 +1,12 @@
+# =============================================================
+#  scripts/managers/GameManager.gd
+# =============================================================
 extends Node
 
-var player_name        : String = "Maryam"
-var total_stars        : int    = 0
-var unlocked_locations : Array  = ["masjid","pondok","taman","kebun","rumah"]
+var player_name        : String  = "Maryam"
+var total_stars        : int     = 0
+var unlocked_locations : Array   = ["masjid","pondok","taman","kebun","rumah"]
+var last_x             : float   = 200.0
 
 signal star_collected(total: int)
 signal location_unlocked(location_name: String)
@@ -27,3 +31,8 @@ func unlock_location(loc: String) -> void:
 
 func is_location_unlocked(loc: String) -> bool:
 	return loc in unlocked_locations
+
+
+func set_last_position(x: float) -> void:
+	last_x = x
+	SaveManager.save()

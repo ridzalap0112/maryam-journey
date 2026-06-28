@@ -1,3 +1,6 @@
+# =============================================================
+#  scripts/locations/LocationZone.gd
+# =============================================================
 extends Area2D
 
 @export var location_name : String = "Lokasi"
@@ -54,4 +57,8 @@ func _enter() -> void:
 	if scene_path == "" or not ResourceLoader.exists(scene_path):
 		print("[Zone] Scene belum ada: ", location_name)
 		return
+	# Simpan posisi player sekarang sebelum pindah scene
+	var player := get_tree().get_first_node_in_group("player")
+	if player:
+		GameManager.set_last_position(player.global_position.x)
 	TransitionManager.go_to(scene_path)

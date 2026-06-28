@@ -1,3 +1,6 @@
+# =============================================================
+#  scripts/managers/SaveManager.gd
+# =============================================================
 extends Node
 
 const SAVE_PATH : String = "user://maryam_save.json"
@@ -8,6 +11,7 @@ func save() -> void:
 		"player_name"        : GameManager.player_name,
 		"total_stars"        : GameManager.total_stars,
 		"unlocked_locations" : GameManager.unlocked_locations,
+		"last_x"             : GameManager.last_x,
 	}
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
@@ -30,7 +34,9 @@ func load_save() -> bool:
 	var data : Dictionary = json.get_data()
 	GameManager.player_name        = data.get("player_name", "Maryam")
 	GameManager.total_stars        = data.get("total_stars", 0)
-	GameManager.unlocked_locations = data.get("unlocked_locations", ["masjid","pondok","taman","kebun","rumah"])
+	GameManager.unlocked_locations = data.get("unlocked_locations",
+		["masjid","pondok","taman","kebun","rumah"])
+	GameManager.last_x             = data.get("last_x", 200.0)
 	return true
 
 

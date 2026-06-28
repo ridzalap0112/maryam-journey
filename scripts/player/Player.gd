@@ -1,3 +1,6 @@
+# =============================================================
+#  scripts/player/Player.gd  —  Godot 4.7
+# =============================================================
 extends CharacterBody2D
 
 const SPEED       : float = 200.0
@@ -16,6 +19,9 @@ func _ready() -> void:
 	assert(_sprite != null, "AnimatedSprite2D tidak ditemukan!")
 	add_to_group("player")
 	_play_anim("idle")
+	# Spawn di posisi terakhir (depan lokasi yang baru dikunjungi)
+	global_position.x = GameManager.last_x
+	global_position.y = FLOOR_Y
 
 
 func _physics_process(delta: float) -> void:
