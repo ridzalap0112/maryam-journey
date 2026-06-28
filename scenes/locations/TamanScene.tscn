@@ -1,0 +1,190 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/locations/TamanScene.gd" id="1_taman"]
+
+[sub_resource type="StyleBoxFlat" id="SB_topbar"]
+bg_color = Color(0.05, 0.14, 0.08, 0.97)
+border_width_bottom = 2
+border_color = Color(0.22, 0.78, 0.35, 0.70)
+
+[sub_resource type="StyleBoxFlat" id="SB_soal"]
+bg_color = Color(0.06, 0.18, 0.10, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.78, 0.35, 0.70)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="SB_selesai"]
+bg_color = Color(0.05, 0.16, 0.09, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.22, 0.85, 0.40, 1.0)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="SB_btn_back"]
+bg_color = Color(0.10, 0.22, 0.12, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.78, 0.35, 0.80)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 16.0
+content_margin_right = 16.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="SB_btn_keluar"]
+bg_color = Color(0.14, 0.55, 0.25, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.85, 0.40, 0.90)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[node name="TamanScene" type="Node2D"]
+script = ExtResource("1_taman")
+
+[node name="BgSky" type="ColorRect" parent="."]
+color = Color(0.07, 0.14, 0.09, 1)
+size = Vector2(1280, 720)
+
+[node name="GlowGreen" type="Polygon2D" parent="."]
+color = Color(0.10, 0.45, 0.18, 0.18)
+polygon = PackedVector2Array(0,0, 1280,0, 1280,400, 0,400)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="Panel" parent="UI"]
+position = Vector2(0, 0)
+size = Vector2(1280, 60)
+theme_override_styles/panel = SubResource("SB_topbar")
+
+[node name="LblJudul" type="Label" parent="UI/TopBar"]
+position = Vector2(0, 0)
+size = Vector2(1280, 60)
+text = "🧩  Taman Logika  —  Cocokkan Warnanya!"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.55, 0.95, 0.55, 1)
+
+[node name="LblProgress" type="Label" parent="UI/TopBar"]
+position = Vector2(900, 0)
+size = Vector2(300, 60)
+text = "1 / 8"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.80, 0.95, 0.80, 1)
+
+[node name="BtnBack" type="Button" parent="UI/TopBar"]
+position = Vector2(12, 10)
+size = Vector2(80, 40)
+text = "← Balik"
+theme_override_styles/normal = SubResource("SB_btn_back")
+theme_override_styles/hover = SubResource("SB_btn_back")
+theme_override_styles/pressed = SubResource("SB_btn_back")
+theme_override_font_sizes/font_size = 13
+
+[node name="SoalPanel" type="Panel" parent="UI"]
+position = Vector2(290, 90)
+size = Vector2(700, 200)
+theme_override_styles/panel = SubResource("SB_soal")
+
+[node name="LblSoal" type="Label" parent="UI/SoalPanel"]
+position = Vector2(0, 20)
+size = Vector2(700, 40)
+text = "Pilih warna:"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.80, 0.95, 0.80, 1)
+
+[node name="LblWarna" type="Label" parent="UI/SoalPanel"]
+position = Vector2(0, 70)
+size = Vector2(700, 80)
+text = "MERAH"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 52
+
+[node name="KotakWarna" type="Panel" parent="UI/SoalPanel"]
+position = Vector2(310, 150)
+size = Vector2(80, 40)
+visible = false
+
+[node name="LblFeedback" type="Label" parent="UI"]
+position = Vector2(0, 300)
+size = Vector2(1280, 50)
+text = "✅  Betul!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+visible = false
+
+[node name="PilihanBox" type="HBoxContainer" parent="UI"]
+position = Vector2(150, 370)
+size = Vector2(980, 160)
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="PanelSelesai" type="Panel" parent="UI"]
+position = Vector2(390, 160)
+size = Vector2(500, 400)
+visible = false
+theme_override_styles/panel = SubResource("SB_selesai")
+
+[node name="VBox" type="VBoxContainer" parent="UI/PanelSelesai"]
+position = Vector2(32, 32)
+size = Vector2(436, 336)
+theme_override_constants/separation = 20
+
+[node name="LblEmoji" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "🧩 🌟 🎉"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 40
+
+[node name="LblSelesai" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "Maryam Cerdas!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.80, 1.0, 0.80, 1)
+
+[node name="LblSkor" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "Benar: 8 / 8"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.60, 0.95, 0.65, 1)
+
+[node name="LblBintang" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "⭐ ⭐ ⭐  +3 Bintang!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1.0, 0.84, 0.12, 1)
+
+[node name="BtnKeluar" type="Button" parent="UI/PanelSelesai/VBox"]
+text = "🏠  Kembali ke Dunia"
+theme_override_styles/normal = SubResource("SB_btn_keluar")
+theme_override_styles/hover = SubResource("SB_btn_keluar")
+theme_override_styles/pressed = SubResource("SB_btn_keluar")
+theme_override_font_sizes/font_size = 16

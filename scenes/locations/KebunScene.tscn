@@ -1,0 +1,199 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/locations/KebunScene.gd" id="1_kebun"]
+
+[sub_resource type="StyleBoxFlat" id="SB_topbar"]
+bg_color = Color(0.06, 0.16, 0.06, 0.97)
+border_width_bottom = 2
+border_color = Color(0.35, 0.80, 0.25, 0.65)
+
+[sub_resource type="StyleBoxFlat" id="SB_card"]
+bg_color = Color(0.06, 0.18, 0.07, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.35, 0.80, 0.25, 0.75)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="SB_selesai"]
+bg_color = Color(0.05, 0.18, 0.06, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.35, 0.88, 0.28, 1.0)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="SB_btn_back"]
+bg_color = Color(0.10, 0.24, 0.10, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.80, 0.25, 0.80)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 16.0
+content_margin_right = 16.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="SB_btn_next"]
+bg_color = Color(0.14, 0.50, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.88, 0.28, 0.90)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 28.0
+content_margin_right = 28.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[node name="KebunScene" type="Node2D"]
+script = ExtResource("1_kebun")
+
+[node name="BgSky" type="ColorRect" parent="."]
+color = Color(0.07, 0.14, 0.07, 1)
+size = Vector2(1280, 720)
+
+[node name="GlowGreen" type="Polygon2D" parent="."]
+color = Color(0.10, 0.35, 0.10, 0.20)
+polygon = PackedVector2Array(0,0, 1280,0, 1280,400, 0,400)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="Panel" parent="UI"]
+position = Vector2(0, 0)
+size = Vector2(1280, 60)
+theme_override_styles/panel = SubResource("SB_topbar")
+
+[node name="LblJudul" type="Label" parent="UI/TopBar"]
+position = Vector2(0, 0)
+size = Vector2(1280, 60)
+text = "🌿  Kebun Karakter  —  Cerita Nilai Islam"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.60, 0.95, 0.45, 1)
+
+[node name="LblProgress" type="Label" parent="UI/TopBar"]
+position = Vector2(900, 0)
+size = Vector2(300, 60)
+text = "1 / 5"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.75, 0.95, 0.65, 1)
+
+[node name="BtnBack" type="Button" parent="UI/TopBar"]
+position = Vector2(12, 10)
+size = Vector2(80, 40)
+text = "← Balik"
+theme_override_styles/normal = SubResource("SB_btn_back")
+theme_override_styles/hover = SubResource("SB_btn_back")
+theme_override_styles/pressed = SubResource("SB_btn_back")
+theme_override_font_sizes/font_size = 13
+
+[node name="CardCerita" type="Panel" parent="UI"]
+position = Vector2(190, 80)
+size = Vector2(900, 560)
+theme_override_styles/panel = SubResource("SB_card")
+
+[node name="LblJudul" type="Label" parent="UI/CardCerita"]
+position = Vector2(0, 24)
+size = Vector2(900, 50)
+text = "🌸 Berbagi Itu Indah"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.75, 0.98, 0.60, 1)
+
+[node name="LblEmoji" type="Label" parent="UI/CardCerita"]
+position = Vector2(0, 82)
+size = Vector2(900, 70)
+text = "🍎"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 52
+
+[node name="LblCerita" type="Label" parent="UI/CardCerita"]
+position = Vector2(60, 162)
+size = Vector2(780, 220)
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.90, 0.96, 0.86, 1)
+
+[node name="LblNilai" type="Label" parent="UI/CardCerita"]
+position = Vector2(60, 390)
+size = Vector2(780, 50)
+text = "..."
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(1.0, 0.88, 0.30, 1)
+
+[node name="BtnNext" type="Button" parent="UI/CardCerita"]
+position = Vector2(250, 460)
+size = Vector2(400, 52)
+text = "Cerita Berikutnya →"
+theme_override_styles/normal = SubResource("SB_btn_next")
+theme_override_styles/hover = SubResource("SB_btn_next")
+theme_override_styles/pressed = SubResource("SB_btn_next")
+theme_override_font_sizes/font_size = 16
+
+[node name="PanelSelesai" type="Panel" parent="UI"]
+position = Vector2(390, 160)
+size = Vector2(500, 400)
+visible = false
+theme_override_styles/panel = SubResource("SB_selesai")
+
+[node name="VBox" type="VBoxContainer" parent="UI/PanelSelesai"]
+position = Vector2(32, 32)
+size = Vector2(436, 336)
+theme_override_constants/separation = 18
+
+[node name="LblEmoji" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "🌿 💚 🌺"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 40
+
+[node name="LblSelesai" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "Maryam Berbudi Baik!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.75, 1.0, 0.65, 1)
+
+[node name="LblDesc" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "Kamu sudah belajar
+5 nilai kebaikan Islam!"
+horizontal_alignment = 1
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.80, 0.95, 0.75, 1)
+
+[node name="LblBintang" type="Label" parent="UI/PanelSelesai/VBox"]
+text = "⭐ ⭐ ⭐  +3 Bintang!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1.0, 0.84, 0.12, 1)
+
+[node name="BtnKeluar" type="Button" parent="UI/PanelSelesai/VBox"]
+text = "🏠  Kembali ke Dunia"
+theme_override_styles/normal = SubResource("SB_btn_next")
+theme_override_styles/hover = SubResource("SB_btn_next")
+theme_override_styles/pressed = SubResource("SB_btn_next")
+theme_override_font_sizes/font_size = 16

@@ -597,6 +597,7 @@ position = Vector2(2464, 500)
 script = ExtResource("2_zone")
 location_name = "Taman Logika"
 location_key = "taman"
+scene_path = "res://scenes/locations/TamanScene.tscn"
 [node name="Shape" type="CollisionShape2D" parent="Locations/ZoneTaman"]
 shape = SubResource("Shape_zone")
 [node name="LabelPanel" type="Panel" parent="Locations/ZoneTaman"]
@@ -621,6 +622,7 @@ position = Vector2(3265, 500)
 script = ExtResource("2_zone")
 location_name = "Kebun Karakter"
 location_key = "kebun"
+scene_path = "res://scenes/locations/KebunScene.tscn"
 [node name="Shape" type="CollisionShape2D" parent="Locations/ZoneKebun"]
 shape = SubResource("Shape_zone")
 [node name="LabelPanel" type="Panel" parent="Locations/ZoneKebun"]
@@ -645,6 +647,7 @@ position = Vector2(4073, 500)
 script = ExtResource("2_zone")
 location_name = "Rumah Maryam"
 location_key = "rumah"
+scene_path = "res://scenes/locations/RumahScene.tscn"
 [node name="Shape" type="CollisionShape2D" parent="Locations/ZoneRumah"]
 shape = SubResource("Shape_zone")
 [node name="LabelPanel" type="Panel" parent="Locations/ZoneRumah"]
