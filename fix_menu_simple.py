@@ -1,3 +1,77 @@
+"""
+Maryam Journey - Fix Menu Simple & Final
+python fix_menu_simple.py
+"""
+import os, subprocess
+
+BASE = os.getcwd()
+
+def write(filepath, content):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8", newline="\n") as f:
+        f.write(content)
+    print(f"  ✅  {os.path.relpath(filepath, BASE)}")
+
+print("\n🌙 Fix Menu Simple & Final")
+print("=" * 40)
+
+# Strategi: TIDAK pakai Container apapun
+# Card Panel diposisi manual X=410, Y=160 (center dari 1280x720)
+# Card size = 460 x 400
+# Center X = (1280 - 460) / 2 = 410
+# Center Y = (720 - 400) / 2 = 160
+#
+# @onready path: $UI/Card/Inner/[NodeName]
+
+write(os.path.join(BASE, "scripts", "ui", "MainMenu.gd"), """\
+# =============================================================
+#  scripts/ui/MainMenu.gd
+# =============================================================
+extends Node2D
+
+const WORLD_SCENE : String = "res://scenes/world/WorldMap.tscn"
+
+@onready var _btn_start    : Button = $UI/Card/Inner/BtnStart
+@onready var _btn_continue : Button = $UI/Card/Inner/BtnContinue
+@onready var _btn_reset    : Button = $UI/Card/Inner/BtnReset
+@onready var _lbl_stars    : Label  = $UI/Card/Inner/LblStars
+
+
+func _ready() -> void:
+\tvar has_save := SaveManager.has_save()
+\t_btn_continue.visible = has_save
+\t_btn_reset.visible    = has_save
+\tif has_save:
+\t\tSaveManager.load_save()
+\t\t_lbl_stars.text = "⭐ " + str(GameManager.total_stars) + " bintang tersimpan"
+\telse:
+\t\t_lbl_stars.text = "Petualangan baru menantimu!"
+\t_btn_start.pressed.connect(_on_start)
+\t_btn_continue.pressed.connect(_on_continue)
+\t_btn_reset.pressed.connect(_on_reset)
+
+
+func _on_start() -> void:
+\tSaveManager.delete_save()
+\tGameManager.total_stars        = 0
+\tGameManager.unlocked_locations = ["masjid","pondok","taman","kebun","rumah"]
+\tTransitionManager.go_to(WORLD_SCENE)
+
+
+func _on_continue() -> void:
+\tTransitionManager.go_to(WORLD_SCENE)
+
+
+func _on_reset() -> void:
+\tSaveManager.delete_save()
+\tGameManager.total_stars        = 0
+\tGameManager.unlocked_locations = ["masjid","pondok","taman","kebun","rumah"]
+\t_btn_continue.visible = false
+\t_btn_reset.visible    = false
+\t_lbl_stars.text       = "Petualangan baru menantimu!"
+""")
+
+write(os.path.join(BASE, "scenes", "ui", "MainMenu.tscn"), """\
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/MainMenu.gd" id="1_menu"]
@@ -214,3 +288,14 @@ theme_override_styles/hover = SubResource("SB_hover")
 theme_override_styles/pressed = SubResource("SB_btn")
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.50, 0.50, 1)
+""")
+
+try:
+    subprocess.run(["git", "add", "."], cwd=BASE, check=True)
+    subprocess.run(["git", "commit", "-m", "fix: menu simple manual position center"], cwd=BASE, check=True)
+    subprocess.run(["git", "push"], cwd=BASE, check=True)
+    print("  ✅  GitHub updated!")
+except Exception as e:
+    print(f"  ⚠️  Git: {e}")
+
+print("\n  Godot → Reload → F5 → Card tepat di tengah! 🌙\n")
