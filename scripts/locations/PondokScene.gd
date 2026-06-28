@@ -1,13 +1,11 @@
 # =============================================================
 #  scripts/locations/PondokScene.gd
-#  Pondok Baca — Belajar Huruf A-Z + Kata Pertama
 # =============================================================
 extends Node2D
 
 const WORLD_SCENE : String = "res://scenes/world/WorldMap.tscn"
 
-# 26 huruf A-Z dengan contoh kata & emoji
-const HURUF : Array = [
+const HURUF : Array[Dictionary] = [
 	{"huruf": "A", "kata": "Apel",    "emoji": "🍎"},
 	{"huruf": "B", "kata": "Buku",    "emoji": "📚"},
 	{"huruf": "C", "kata": "Cincin",  "emoji": "💍"},
@@ -36,8 +34,7 @@ const HURUF : Array = [
 	{"huruf": "Z", "kata": "Zebra",   "emoji": "🦓"},
 ]
 
-# Warna kartu per huruf (pastel cerah)
-const WARNA : Array = [
+const WARNA : Array[Color] = [
 	Color(0.95,0.35,0.35,1), Color(0.95,0.55,0.20,1),
 	Color(0.92,0.80,0.12,1), Color(0.55,0.88,0.22,1),
 	Color(0.18,0.80,0.50,1), Color(0.12,0.78,0.80,1),
@@ -53,9 +50,9 @@ const WARNA : Array = [
 	Color(0.18,0.80,0.50,1), Color(0.12,0.78,0.80,1),
 ]
 
-var _sudah_klik   : int   = 0
-var _klik_list    : Array = []
-var _selesai      : bool  = false
+var _sudah_klik : int   = 0
+var _klik_list  : Array = []
+var _selesai    : bool  = false
 
 @onready var _grid          : GridContainer = $UI/Scroll/Grid
 @onready var _lbl_progress  : Label         = $UI/TopBar/LblProgress
@@ -66,8 +63,8 @@ var _selesai      : bool  = false
 
 
 func _ready() -> void:
-	_lbl_progress.text  = "0 / 26 huruf"
-	_lbl_info.text      = "Sentuh huruf untuk belajar!"
+	_lbl_progress.text     = "0 / 26 huruf"
+	_lbl_info.text         = "Sentuh huruf untuk belajar!"
 	_panel_selesai.visible = false
 	_btn_back.pressed.connect(_on_back)
 	_btn_keluar.pressed.connect(_on_back)
@@ -76,22 +73,21 @@ func _ready() -> void:
 
 func _build_kartu() -> void:
 	for i in HURUF.size():
-		var data := HURUF[i]
-		var warna := WARNA[i]
-		var btn   := Button.new()
-		var idx   := i
+		var data  : Dictionary = HURUF[i]
+		var warna : Color      = WARNA[i]
+		var btn   : Button     = Button.new()
+		var idx   : int        = i
 
 		btn.custom_minimum_size = Vector2(100, 100)
 
-		# Isi tombol: huruf besar + emoji + kata
-		var lbl_huruf := Label.new()
+		var lbl_huruf : Label = Label.new()
 		lbl_huruf.text = data["huruf"]
 		lbl_huruf.add_theme_font_size_override("font_size", 38)
 		lbl_huruf.add_theme_color_override("font_color", Color(1,1,1,1))
 		lbl_huruf.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl_huruf.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-		var lbl_kata := Label.new()
+		var lbl_kata : Label = Label.new()
 		lbl_kata.text = data["emoji"] + " " + data["kata"]
 		lbl_kata.add_theme_font_size_override("font_size", 10)
 		lbl_kata.add_theme_color_override("font_color", Color(1,1,1,0.90))
@@ -100,33 +96,31 @@ func _build_kartu() -> void:
 		lbl_kata.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		lbl_kata.offset_bottom = -6.0
 
-		# StyleBox normal
-		var sb := StyleBoxFlat.new()
-		sb.bg_color = warna
-		sb.corner_radius_top_left     = 16
-		sb.corner_radius_top_right    = 16
-		sb.corner_radius_bottom_left  = 16
-		sb.corner_radius_bottom_right = 16
-		sb.border_width_left   = 3
-		sb.border_width_top    = 3
-		sb.border_width_right  = 3
-		sb.border_width_bottom = 3
-		sb.border_color        = Color(1,1,1,0.35)
-		sb.shadow_color        = Color(0,0,0,0.25)
-		sb.shadow_size         = 4
+		var sb : StyleBoxFlat = StyleBoxFlat.new()
+		sb.bg_color                       = warna
+		sb.corner_radius_top_left         = 16
+		sb.corner_radius_top_right        = 16
+		sb.corner_radius_bottom_left      = 16
+		sb.corner_radius_bottom_right     = 16
+		sb.border_width_left              = 3
+		sb.border_width_top               = 3
+		sb.border_width_right             = 3
+		sb.border_width_bottom            = 3
+		sb.border_color                   = Color(1,1,1,0.35)
+		sb.shadow_color                   = Color(0,0,0,0.25)
+		sb.shadow_size                    = 4
 
-		# StyleBox sudah diklik
-		var sb_done := StyleBoxFlat.new()
-		sb_done.bg_color = Color(warna.r*0.50, warna.g*0.50, warna.b*0.50, 1)
+		var sb_done : StyleBoxFlat = StyleBoxFlat.new()
+		sb_done.bg_color                   = Color(warna.r*0.50, warna.g*0.50, warna.b*0.50, 1)
 		sb_done.corner_radius_top_left     = 16
 		sb_done.corner_radius_top_right    = 16
 		sb_done.corner_radius_bottom_left  = 16
 		sb_done.corner_radius_bottom_right = 16
-		sb_done.border_width_left   = 3
-		sb_done.border_width_top    = 3
-		sb_done.border_width_right  = 3
-		sb_done.border_width_bottom = 3
-		sb_done.border_color        = Color(1,1,1,0.85)
+		sb_done.border_width_left          = 3
+		sb_done.border_width_top           = 3
+		sb_done.border_width_right         = 3
+		sb_done.border_width_bottom        = 3
+		sb_done.border_color               = Color(1,1,1,0.85)
 
 		btn.add_theme_stylebox_override("normal",  sb)
 		btn.add_theme_stylebox_override("hover",   sb_done)
@@ -140,14 +134,14 @@ func _build_kartu() -> void:
 func _on_kartu(idx: int, btn: Button, sb_done: StyleBoxFlat) -> void:
 	if _selesai:
 		return
-	var data := HURUF[idx]
+	var data : Dictionary = HURUF[idx]
 	_lbl_info.text = data["huruf"] + "  —  " + data["emoji"] + "  " + data["kata"]
 
 	if idx not in _klik_list:
 		_klik_list.append(idx)
 		_sudah_klik += 1
 		btn.add_theme_stylebox_override("normal", sb_done)
-		var chk := Label.new()
+		var chk : Label = Label.new()
 		chk.text = "✓"
 		chk.add_theme_font_size_override("font_size", 14)
 		chk.add_theme_color_override("font_color", Color(1,1,1,0.95))
