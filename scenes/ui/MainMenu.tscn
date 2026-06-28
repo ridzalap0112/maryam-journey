@@ -153,8 +153,10 @@ polygon = PackedVector2Array(0,534, 18,500, 38,484, 50,480, 62,484, 82,500, 100,
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Margin" type="MarginContainer" parent="UI"]
-offset_right = 1280.0
-offset_bottom = 720.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Center" type="CenterContainer" parent="UI/Margin"]
 size_flags_horizontal = 3
