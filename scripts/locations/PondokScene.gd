@@ -135,6 +135,7 @@ func _on_kartu(idx: int, btn: Button, sb_done: StyleBoxFlat) -> void:
 	if _selesai:
 		return
 	var data : Dictionary = HURUF[idx]
+	AudioManager.play_sfx("click")
 	_lbl_info.text = data["huruf"] + "  —  " + data["emoji"] + "  " + data["kata"]
 
 	if idx not in _klik_list:
@@ -156,6 +157,7 @@ func _on_kartu(idx: int, btn: Button, sb_done: StyleBoxFlat) -> void:
 
 
 func _show_selesai() -> void:
+	AudioManager.play_sfx("star")
 	GameManager.add_star(3)
 	_panel_selesai.visible = true
 

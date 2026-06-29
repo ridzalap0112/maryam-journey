@@ -121,6 +121,7 @@ func _on_kartu_pressed(idx: int, btn: Button, sb_done: StyleBoxFlat) -> void:
 	if _selesai_semua:
 		return
 	var data : Dictionary = HIJAIYAH[idx]
+	AudioManager.play_sfx("click")
 	_lbl_nama.text = data["arab"] + "  —  " + data["nama"]
 
 	# Tandai selesai jika belum
@@ -144,6 +145,7 @@ func _on_kartu_pressed(idx: int, btn: Button, sb_done: StyleBoxFlat) -> void:
 
 
 func _show_selesai() -> void:
+	AudioManager.play_sfx("star")
 	GameManager.add_star(3)
 	_panel_selesai.visible = true
 

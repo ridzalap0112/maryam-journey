@@ -17,6 +17,7 @@ func _ready() -> void:
 		_lbl_stars.text = "⭐ " + str(GameManager.total_stars) + " bintang tersimpan"
 	else:
 		_lbl_stars.text = "Petualangan baru menantimu!"
+	AudioManager.play_bgm("menu")
 	_btn_start.pressed.connect(_on_start)
 	_btn_continue.pressed.connect(_on_continue)
 	_btn_reset.pressed.connect(_on_reset)

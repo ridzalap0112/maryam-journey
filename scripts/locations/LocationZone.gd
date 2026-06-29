@@ -61,4 +61,5 @@ func _enter() -> void:
 	var player := get_tree().get_first_node_in_group("player")
 	if player:
 		GameManager.set_last_position(player.global_position.x)
+	AudioManager.play_sfx("enter")
 	TransitionManager.go_to(scene_path)

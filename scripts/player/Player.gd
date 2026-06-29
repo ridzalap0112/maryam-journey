@@ -49,6 +49,7 @@ func _handle_movement() -> void:
 func _handle_jump() -> void:
 	if is_on_floor() and Input.is_action_just_pressed("jump"):
 		velocity.y = JUMP_FORCE
+		AudioManager.play_sfx("jump")
 
 
 func _enforce_boundary() -> void:

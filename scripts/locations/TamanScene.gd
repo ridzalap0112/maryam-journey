@@ -156,10 +156,12 @@ func _on_pilih_warna(is_benar: bool) -> void:
 		return
 	_lbl_feedback_w.visible = true
 	if is_benar:
+		AudioManager.play_sfx("correct")
 		_benar_warna += 1
 		_lbl_feedback_w.text = "✅  Betul! Hebat Maryam!"
 		_lbl_feedback_w.add_theme_color_override("font_color", Color(0.20,0.90,0.40,1))
 	else:
+		AudioManager.play_sfx("wrong")
 		_lbl_feedback_w.text = "❌  Coba lagi ya!"
 		_lbl_feedback_w.add_theme_color_override("font_color", Color(0.95,0.35,0.35,1))
 	await get_tree().create_timer(0.8).timeout
@@ -262,6 +264,7 @@ func _on_kartu_angka(idx: int, btn: Button, sb_done: StyleBoxFlat, data: Diction
 
 # ── SELESAI ──────────────────────────────────────────────────
 func _selesai(mode: String) -> void:
+	AudioManager.play_sfx("star")
 	GameManager.add_star(3)
 	_panel_warna.visible   = false
 	_panel_angka.visible   = false

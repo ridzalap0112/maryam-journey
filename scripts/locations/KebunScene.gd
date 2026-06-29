@@ -80,6 +80,7 @@ func _tampil_cerita() -> void:
 func _on_next() -> void:
 	if _selesai:
 		return
+	AudioManager.play_sfx("click")
 	_idx += 1
 	_tampil_cerita()
 
@@ -88,6 +89,7 @@ func _selesai_semua() -> void:
 	if _selesai:
 		return
 	_selesai = true
+	AudioManager.play_sfx("star")
 	GameManager.add_star(3)
 	_panel_selesai.visible = true
 
