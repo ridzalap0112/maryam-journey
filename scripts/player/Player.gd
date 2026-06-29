@@ -19,9 +19,15 @@ func _ready() -> void:
 	assert(_sprite != null, "AnimatedSprite2D tidak ditemukan!")
 	add_to_group("player")
 	_play_anim("idle")
-	# Spawn di posisi terakhir (depan lokasi yang baru dikunjungi)
-	global_position.x = GameManager.last_x
-	global_position.y = FLOOR_Y
+	# Gunakan call_deferred agar physics engine sudah siap
+	call_deferred("_set_spawn_position")
+
+
+func _set_spawn_position() -> void:
+	var spawn_x : float = GameManager.last_x
+	spawn_x = clamp(spawn_x, WORLD_LEFT, WORLD_RIGHT)
+	global_position = Vector2(spawn_x, FLOOR_Y)
+	velocity = Vector2.ZERO
 
 
 func _physics_process(delta: float) -> void:

@@ -1,3 +1,6 @@
+# =============================================================
+#  scripts/ui/HUD.gd
+# =============================================================
 extends CanvasLayer
 
 @onready var _name_label : Label = $NameLabel
@@ -10,6 +13,8 @@ func _ready() -> void:
 	GameManager.star_collected.connect(_on_star)
 	_name_label.text = "🌙 " + GameManager.player_name
 	_star_label.text = "⭐  " + str(GameManager.total_stars)
+	# Play BGM world saat HUD siap (WorldMap sudah terbuka)
+	AudioManager.play_bgm("world")
 
 
 func _on_star(total: int) -> void:
