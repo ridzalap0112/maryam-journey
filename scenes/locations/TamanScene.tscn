@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/locations/TamanScene.gd" id="1_taman"]
 
@@ -7,13 +7,25 @@ bg_color = Color(0.05, 0.14, 0.08, 0.97)
 border_width_bottom = 2
 border_color = Color(0.22, 0.78, 0.35, 0.70)
 
-[sub_resource type="StyleBoxFlat" id="SB_soal"]
-bg_color = Color(0.06, 0.18, 0.10, 0.96)
+[sub_resource type="StyleBoxFlat" id="SB_menu"]
+bg_color = Color(0.06, 0.16, 0.09, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.22, 0.78, 0.35, 0.75)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="SB_panel"]
+bg_color = Color(0.06, 0.16, 0.09, 0.94)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.22, 0.78, 0.35, 0.70)
+border_color = Color(0.22, 0.70, 0.30, 0.65)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -47,6 +59,22 @@ content_margin_right = 16.0
 content_margin_top = 8.0
 content_margin_bottom = 8.0
 
+[sub_resource type="StyleBoxFlat" id="SB_btn_modul"]
+bg_color = Color(0.12, 0.42, 0.18, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.30, 0.90, 0.40, 0.90)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 28.0
+content_margin_right = 28.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+
 [sub_resource type="StyleBoxFlat" id="SB_btn_keluar"]
 bg_color = Color(0.14, 0.55, 0.25, 0.95)
 border_width_left = 2
@@ -62,6 +90,18 @@ content_margin_left = 24.0
 content_margin_right = 24.0
 content_margin_top = 12.0
 content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="SB_info"]
+bg_color = Color(0.06, 0.18, 0.09, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.70, 0.30, 0.60)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="TamanScene" type="Node2D"]
 script = ExtResource("1_taman")
@@ -84,16 +124,16 @@ theme_override_styles/panel = SubResource("SB_topbar")
 [node name="LblJudul" type="Label" parent="UI/TopBar"]
 position = Vector2(0, 0)
 size = Vector2(1280, 60)
-text = "🧩  Taman Logika  —  Cocokkan Warnanya!"
+text = "🧩  Taman Logika"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.55, 0.95, 0.55, 1)
 
 [node name="LblProgress" type="Label" parent="UI/TopBar"]
-position = Vector2(900, 0)
-size = Vector2(300, 60)
-text = "1 / 8"
+position = Vector2(880, 0)
+size = Vector2(320, 60)
+text = "🧩 Taman Logika"
 horizontal_alignment = 1
 vertical_alignment = 1
 theme_override_font_sizes/font_size = 14
@@ -108,83 +148,165 @@ theme_override_styles/hover = SubResource("SB_btn_back")
 theme_override_styles/pressed = SubResource("SB_btn_back")
 theme_override_font_sizes/font_size = 13
 
-[node name="SoalPanel" type="Panel" parent="UI"]
-position = Vector2(290, 90)
-size = Vector2(700, 200)
-theme_override_styles/panel = SubResource("SB_soal")
+[node name="PanelMenu" type="Panel" parent="UI"]
+position = Vector2(340, 100)
+size = Vector2(600, 520)
+theme_override_styles/panel = SubResource("SB_menu")
 
-[node name="LblSoal" type="Label" parent="UI/SoalPanel"]
-position = Vector2(0, 20)
-size = Vector2(700, 40)
+[node name="VBox" type="VBoxContainer" parent="UI/PanelMenu"]
+position = Vector2(48, 48)
+size = Vector2(504, 424)
+theme_override_constants/separation = 28
+
+[node name="LblTitle" type="Label" parent="UI/PanelMenu/VBox"]
+size_flags_horizontal = 3
+text = "🌿 Pilih Modul Belajar"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.75, 0.98, 0.60, 1)
+
+[node name="LblDesc" type="Label" parent="UI/PanelMenu/VBox"]
+size_flags_horizontal = 3
+text = "Hari ini mau belajar apa, Maryam?"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.75, 0.90, 0.75, 1)
+
+[node name="Sep" type="HSeparator" parent="UI/PanelMenu/VBox"]
+size_flags_horizontal = 3
+
+[node name="BtnWarna" type="Button" parent="UI/PanelMenu/VBox"]
+size_flags_horizontal = 3
+text = "🌈  Belajar Warna"
+theme_override_styles/normal = SubResource("SB_btn_modul")
+theme_override_styles/hover = SubResource("SB_btn_modul")
+theme_override_styles/pressed = SubResource("SB_btn_modul")
+theme_override_font_sizes/font_size = 20
+
+[node name="LblWarna" type="Label" parent="UI/PanelMenu/VBox"]
+size_flags_horizontal = 3
+text = "Cocokkan nama warna dengan warnanya!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.65, 0.88, 0.65, 1)
+
+[node name="BtnAngka" type="Button" parent="UI/PanelMenu/VBox"]
+size_flags_horizontal = 3
+text = "🔢  Belajar Angka 1-10"
+theme_override_styles/normal = SubResource("SB_btn_modul")
+theme_override_styles/hover = SubResource("SB_btn_modul")
+theme_override_styles/pressed = SubResource("SB_btn_modul")
+theme_override_font_sizes/font_size = 20
+
+[node name="LblAngka" type="Label" parent="UI/PanelMenu/VBox"]
+size_flags_horizontal = 3
+text = "Kenali angka 1 sampai 10 dengan emoji!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.65, 0.88, 0.65, 1)
+
+[node name="PanelWarna" type="Panel" parent="UI"]
+position = Vector2(0, 60)
+size = Vector2(1280, 660)
+visible = false
+theme_override_styles/panel = SubResource("SB_panel")
+
+[node name="LblSoal" type="Label" parent="UI/PanelWarna"]
+position = Vector2(0, 30)
+size = Vector2(1280, 36)
 text = "Pilih warna:"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.80, 0.95, 0.80, 1)
 
-[node name="LblWarna" type="Label" parent="UI/SoalPanel"]
-position = Vector2(0, 70)
-size = Vector2(700, 80)
+[node name="LblNamaWarna" type="Label" parent="UI/PanelWarna"]
+position = Vector2(0, 72)
+size = Vector2(1280, 90)
 text = "MERAH"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 58
 
-[node name="KotakWarna" type="Panel" parent="UI/SoalPanel"]
-position = Vector2(310, 150)
-size = Vector2(80, 40)
-visible = false
-
-[node name="LblFeedback" type="Label" parent="UI"]
-position = Vector2(0, 300)
-size = Vector2(1280, 50)
+[node name="LblFeedback" type="Label" parent="UI/PanelWarna"]
+position = Vector2(0, 172)
+size = Vector2(1280, 44)
 text = "✅  Betul!"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 visible = false
 
-[node name="PilihanBox" type="HBoxContainer" parent="UI"]
-position = Vector2(150, 370)
-size = Vector2(980, 160)
+[node name="PilihanBox" type="HBoxContainer" parent="UI/PanelWarna"]
+position = Vector2(100, 228)
+size = Vector2(1080, 160)
 theme_override_constants/separation = 30
 alignment = 1
 
+[node name="PanelAngka" type="Panel" parent="UI"]
+position = Vector2(0, 60)
+size = Vector2(1280, 660)
+visible = false
+theme_override_styles/panel = SubResource("SB_panel")
+
+[node name="InfoPanel" type="Panel" parent="UI/PanelAngka"]
+position = Vector2(240, 16)
+size = Vector2(800, 48)
+theme_override_styles/panel = SubResource("SB_info")
+
+[node name="LblInfo" type="Label" parent="UI/PanelAngka/InfoPanel"]
+position = Vector2(0, 0)
+size = Vector2(800, 48)
+text = "Sentuh angka untuk belajar!"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.90, 0.98, 0.82, 1)
+
+[node name="GridAngka" type="GridContainer" parent="UI/PanelAngka"]
+position = Vector2(30, 80)
+size = Vector2(1220, 560)
+columns = 5
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+
 [node name="PanelSelesai" type="Panel" parent="UI"]
 position = Vector2(390, 160)
-size = Vector2(500, 400)
+size = Vector2(500, 380)
 visible = false
 theme_override_styles/panel = SubResource("SB_selesai")
 
 [node name="VBox" type="VBoxContainer" parent="UI/PanelSelesai"]
 position = Vector2(32, 32)
-size = Vector2(436, 336)
-theme_override_constants/separation = 20
+size = Vector2(436, 316)
+theme_override_constants/separation = 18
 
 [node name="LblEmoji" type="Label" parent="UI/PanelSelesai/VBox"]
 text = "🧩 🌟 🎉"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 36
 
 [node name="LblSelesai" type="Label" parent="UI/PanelSelesai/VBox"]
 text = "Maryam Cerdas!"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.80, 1.0, 0.80, 1)
-
-[node name="LblSkor" type="Label" parent="UI/PanelSelesai/VBox"]
-text = "Benar: 8 / 8"
-horizontal_alignment = 1
-theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.60, 0.95, 0.65, 1)
 
 [node name="LblBintang" type="Label" parent="UI/PanelSelesai/VBox"]
 text = "⭐ ⭐ ⭐  +3 Bintang!"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1.0, 0.84, 0.12, 1)
+
+[node name="BtnMenuLagi" type="Button" parent="UI/PanelSelesai/VBox"]
+text = "🧩  Modul Lain"
+theme_override_styles/normal = SubResource("SB_btn_keluar")
+theme_override_styles/hover = SubResource("SB_btn_keluar")
+theme_override_styles/pressed = SubResource("SB_btn_keluar")
+theme_override_font_sizes/font_size = 15
 
 [node name="BtnKeluar" type="Button" parent="UI/PanelSelesai/VBox"]
 text = "🏠  Kembali ke Dunia"
 theme_override_styles/normal = SubResource("SB_btn_keluar")
 theme_override_styles/hover = SubResource("SB_btn_keluar")
 theme_override_styles/pressed = SubResource("SB_btn_keluar")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
